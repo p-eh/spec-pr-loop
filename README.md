@@ -5,7 +5,9 @@ OpenSpec-driven, PR-review-iteration agentic loop harness.
 - Propose a change with `openspec-propose` (or `spec-interview` for a rough idea)
 - Claude applies it with `openspec-apply-change`
 - Open the PR with `open-pr`
-- Triage review comments with `pr-comment-triage`
+- Review it, add review comments on the PR
+- Let Claude work through those comments with `pr-comment-triage`
+- Iterate until happy
 - Finish the PR with `finish-pr`
 - Archive the change with `openspec-archive-change`
 - Back to start ⬆️ and into the loop 😵‍💫
