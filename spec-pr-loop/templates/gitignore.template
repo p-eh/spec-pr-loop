@@ -1,0 +1,26 @@
+# --- Core (Python + Node, common to every repo) ---
+.venv/
+venv/
+.env
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+node_modules/
+*.db
+.DS_Store
+Thumbs.db
+
+# Personal Claude Code settings (machine-local permission overrides, not project content)
+.claude/settings.local.json
+
+# --- Project-specific patterns (examples — adapt, don't copy literally) ---
+#
+# Ignore generated/user-supplied data, but allowlist a specific committed sample:
+#   data/manuals/*
+#   !data/manuals/.gitkeep
+#   !data/manuals/some-sample-file.pdf
+#
+# Ignore generated binary assets by extension, keep hand-authored companion files:
+#   episodes/*/backgrounds/*.png
+#   !episodes/*/dialogue/*.json

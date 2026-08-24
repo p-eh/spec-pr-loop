@@ -1,0 +1,24 @@
+# Lint/format on every commit, regardless of what made the edit (Claude, you,
+# a script) — this is why it's a pre-commit hook and not a PostToolUse hook,
+# which only fires on Claude's own Write/Edit calls.
+#
+# `language: system` calls the linter already on PATH / in requirements.txt,
+# rather than pre-commit's own managed env — avoids a Windows long-path build
+# failure some managed-env installs hit. Swap the linter/formatter commands
+# for your stack (ruff for Python shown here; eslint --fix / prettier for JS).
+#
+# One-time setup per clone: `pip install -r requirements.txt && pre-commit install`
+
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check --fix
+        entry: ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: ruff format
+        language: system
+        types: [python]

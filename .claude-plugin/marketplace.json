@@ -1,0 +1,13 @@
+{
+  "name": "spec-pr-loop",
+  "owner": {
+    "name": "Peter"
+  },
+  "plugins": [
+    {
+      "name": "spec-pr-loop",
+      "source": "./spec-pr-loop",
+      "description": "Spec-driven, PR-review-iteration workflow: OpenSpec change tracking (incl. proposal-only idea stubs), worktree-per-PR lifecycle (open-pr + pr-comment-triage + finish-pr), a destructive-git PreToolUse guard, and a staged spec-interview skill."
+    }
+  ]
+}
