@@ -16,14 +16,14 @@ Work through a pull request's outstanding review comments systematically, one co
    - When a comment is clear on its own but its implementation has real downstream implications for other artifacts (e.g. a spec that assumed the opposite), treat that link as part of making the change correctly — update the downstream artifact too — not as a reason to ask, unless the *right* resolution of that downstream conflict is itself ambiguous.
 
 3. **Act per comment:**
-   - **Clear → make the change, then reply.** Edit the actual file(s) the comment concerns (and any downstream artifact the change touches). Then post a reply on that comment thread stating what changed (concrete: file, what was added/removed/reworded) — not just "done".
+   - **Clear → make the change, push it, then reply.** Edit the actual file(s) the comment concerns (and any downstream artifact the change touches). Commit it and push to the PR's own branch, without asking first: a reply describing code that isn't on the PR yet is stale. One commit can cover several comments, as long as it's pushed before the first reply that refers to it. Then post a reply on that comment thread stating what changed (concrete: file, what was added/removed/reworded, and the commit) — not just "done".
    - **Ambiguous → reply with a question, don't guess.** Post a reply asking the specific clarifying question. Do not edit files for that comment until it's answered.
 
 4. **Look for cross-references between comments.** Reviewers often write follow-up comments referencing earlier ones ("as mentioned above", "same as the other one"). Read all comments before acting on any one, so a later comment can inform how you resolve an earlier one (or vice versa) instead of treating each in isolation.
 
 5. **Use the platform's reply mechanism**, not a new top-level comment:
    - GitHub line comments: `gh api repos/<owner>/<repo>/pulls/<n>/comments -f body='<reply>' -F in_reply_to=<comment_id> -X POST` (replies into the same thread).
-   - If the review is still pending (unsubmitted, only visible to its author), replies work the same way against comment IDs; don't submit/publish the review unless asked.
+   - If the comment belongs to a still-pending review (unsubmitted, only visible to its author), the REST reply above fails with 422 ("can only have one pending review per pull request"), because replies post under the same account. Add the reply to that pending review instead, via GraphQL `addPullRequestReviewThreadReply(input: {pullRequestReviewThreadId: <thread node id>, pullRequestReviewId: <pending review node id>, body: ...})`. The thread id comes from `reviewThreads { id comments(first:1) { nodes { databaseId } } }`, the review id from the review's `node_id`. The reply stays invisible to others until the user submits the review, so tell them that. Don't submit/publish the review unless asked.
    - **Prefix every reply body with `Claude: `.** Replies post under the user's own account/token (`gh` uses their auth), so without a marker a Claude-authored reply is visually indistinguishable from the human reviewer's own comments in the thread. The prefix is what makes it possible to tell them apart later.
 
 6. **Summarize when done.** Short list: which comments got a code change (+ what changed), which got a question (+ what was asked), any comment intentionally left untouched and why. Note which addressed threads are ready to be marked resolved — but don't resolve them yourself; that's the user's call. A reply does *not* automatically mark a GitHub thread resolved (that's a separate GitHub action), so an addressed thread stays open until the user closes it, and that's expected, not a bug.
@@ -34,4 +34,5 @@ Work through a pull request's outstanding review comments systematically, one co
 - Don't let "clear" become "clear enough" — if two readings of a comment would lead to materially different changes, it's ambiguous.
 - Preserve existing thread structure: reply in-thread, don't delete/recreate comments unless the user asks.
 - If a clear change would remove or contradict something another still-open comment depends on, flag that conflict in your reply rather than silently picking a side.
+- Pushing without asking covers only fix commits to the PR's own branch, as a plain (non-force) push. Pushing any other branch, opening a PR, or merging still needs the user's explicit yes.
 - **Never resolve a review thread**, even one you fully addressed. Resolving is the user's decision to make, always — report it as done via your reply and let them close it.

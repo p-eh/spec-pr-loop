@@ -72,8 +72,8 @@ claude plugin install spec-pr-loop
   Confirms scope, checks the worktree is committed, proposes branch/title/
   body, pushes and runs `gh pr create` only after you confirm. Never merges.
 - `pr-comment-triage` triages unresolved PR comments one at a time during
-  review. Specific comments get implemented and replied to. Vague ones get
-  a clarifying question.
+  review. Specific comments get implemented, pushed to the PR's branch and
+  replied to. Vague ones get a clarifying question.
 - `finish-pr` audits after comments are addressed: GitHub thread-resolution
   status via GraphQL (a reply isn't a resolve), OpenSpec completion/archive
   status, the project's own guard checks (lint, tests, drift checks), and
